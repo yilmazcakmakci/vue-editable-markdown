@@ -57,10 +57,10 @@ You can override following classnames for changing components background color a
 
 ```css
 .light.md-text-container {
-    background-color: transparent !important; */ your favourite color */
+    background-color: transparent !important; /* your favourite color */
 }
 
 .dark.md-text-container {
-    background-color: #000 !important;  */ your favourite color */
+    background-color: #000 !important;  /* your favourite color */
 }
 ```
