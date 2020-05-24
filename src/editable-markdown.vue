@@ -142,4 +142,8 @@ export default {
   .dark .md-textarea {
     color: #C4C4C4;
   }
+
+  .light .md-textarea {
+    color: black;
+  }
 </style>
