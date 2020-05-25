@@ -1,4 +1,4 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _interopDefault(e){return(e&&(typeof e==='object')&&'default'in e)?e['default']:e}var highlight=_interopDefault(require('highlight.js')),marked=_interopDefault(require('marked'));require('highlight.js/lib/core'),require('highlight.js/styles/tomorrow-night.css'),require('github-markdown-css');marked.setOptions({
+'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _interopDefault(e){return(e&&(typeof e==='object')&&'default'in e)?e['default']:e}var highlight=_interopDefault(require('highlight.js')),marked=_interopDefault(require('marked'));require('highlight.js/styles/tomorrow-night.css'),require('github-markdown-css');var DOMPurify=_interopDefault(require('dompurify'));marked.setOptions({
   renderer: new marked.Renderer(),
   highlight: function highlight$1(code, language) {
     var hljs = highlight;
@@ -11,6 +11,14 @@
 });
 var script = {
   name: 'EditableMarkdown',
+  directives: {
+    focus: {
+      inserted: function inserted(el) {
+        el.focus();
+        el.select();
+      }
+    }
+  },
   props: {
     mode: {
       type: String,
@@ -32,7 +40,7 @@ var script = {
   },
   computed: {
     markedText: function markedText() {
-      return marked(this.markdownText);
+      return DOMPurify.sanitize(marked(this.markdownText));
     }
   },
   methods: {
@@ -43,16 +51,8 @@ var script = {
     showTextarea: function showTextarea() {
       this.editableState = true;
     },
-    returnMD: function returnMD(e) {
+    returnMD: function returnMD() {
       this.$emit('input', this.markdownText);
-    }
-  },
-  directives: {
-    focus: {
-      inserted: function inserted(el) {
-        el.focus();
-        el.select();
-      }
     }
   }
 };function normalizeComponent(template, style, script, scopeId, isFunctionalTemplate, moduleIdentifier /* server only */, shadowMode, createInjector, createInjectorSSR, createInjectorShadow) {
@@ -211,8 +211,8 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-08176538_0", {
-    source: ":root{--md-dark-bg:#30393e;--md-dark-text:#afafaf;--md-dark-tbl:#15191f}.markdown-body{box-sizing:border-box;padding:45px;cursor:pointer}.dark .markdown-body{color:var(--md-dark-text)}.dark .markdown-body blockquote,.dark .markdown-body h1,.dark .markdown-body h2,.dark .markdown-body table td,.dark .markdown-body table th{border-color:var(--md-dark-bg)}.dark .markdown-body code,.dark .markdown-body hr,.dark .markdown-body pre{background-color:var(--md-dark-bg)}.dark .markdown-body table tr:nth-child(2n){background-color:var(--md-dark-tbl)}.dark .markdown-body table tr{background-color:transparent}.md-text-container{border-radius:12px;font-family:Cambria}.dark.md-text-container{background-color:#222831}.light.md-text-container{background-color:#efefef}.md-textarea{background-color:transparent;border:none;outline:0;width:-webkit-fill-available;padding:15px 45px}.dark .md-textarea{color:#c4c4c4}",
+  inject("data-v-378c25dc_0", {
+    source: ":root{--md-dark-bg:#30393e;--md-dark-text:#afafaf;--md-dark-tbl:#15191f}.markdown-body{box-sizing:border-box;padding:45px;cursor:pointer}.dark .markdown-body{color:var(--md-dark-text)}.dark .markdown-body blockquote,.dark .markdown-body h1,.dark .markdown-body h2,.dark .markdown-body table td,.dark .markdown-body table th{border-color:var(--md-dark-bg)}.dark .markdown-body code,.dark .markdown-body hr,.dark .markdown-body pre{background-color:var(--md-dark-bg)}.dark .markdown-body table tr:nth-child(2n){background-color:var(--md-dark-tbl)}.dark .markdown-body table tr{background-color:transparent}.md-text-container{border-radius:12px;font-family:Cambria}.dark.md-text-container{background-color:#222831}.light.md-text-container{background-color:#efefef}.md-textarea{background-color:transparent;border:none;outline:0;width:-webkit-fill-available;padding:15px 45px}.dark .md-textarea{color:#c4c4c4}.light .md-textarea{color:#000!important}",
     map: undefined,
     media: undefined
   });
@@ -223,7 +223,7 @@ var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-08176538";
+var __vue_module_identifier__ = "data-v-378c25dc";
 /* functional template */
 
 var __vue_is_functional_template__ = false;
