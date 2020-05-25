@@ -22,9 +22,9 @@
 
 <script>
 import marked from 'marked'
-import hljs from 'highlight.js/lib/core';
-import 'highlight.js/styles/tomorrow-night.css';
+import 'highlight.js/styles/tomorrow-night.css'
 import 'github-markdown-css'
+import DOMPurify from 'dompurify'
 
 marked.setOptions({
   renderer: new marked.Renderer(),
@@ -67,7 +67,7 @@ export default {
   },
   computed: {
     markedText () {
-      return marked(this.markdownText)
+      return DOMPurify.sanitize(marked(this.markdownText))
     },
   },
   methods: {
