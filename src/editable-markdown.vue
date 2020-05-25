@@ -144,6 +144,6 @@ export default {
   }
 
   .light .md-textarea {
-    color: black;
+    color: black !important;
   }
 </style>

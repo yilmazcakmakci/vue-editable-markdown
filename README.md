@@ -2,6 +2,8 @@
 
 > Click to edit textarea with markdown support.
 
+![Example](example.gif)
+
 ### Install
 
 ```shell

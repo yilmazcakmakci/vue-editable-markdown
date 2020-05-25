@@ -21,7 +21,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div id="app" style="">
-    <editable-markdown mode='light' />
+  <div id="app" style="padding:5% 15%">
+    <editable-markdown mode="dark" />
   </div>
 </template>
