@@ -1,5 +1,8 @@
 # vue-editable-markdown
 
+![npm](https://img.shields.io/npm/dw/vue-editable-markdown)
+![npm](https://img.shields.io/npm/v/vue-editable-markdown)
+
 > Click to edit textarea with markdown support.
 
 ![Example](example.gif)
