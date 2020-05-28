@@ -25,12 +25,16 @@ import marked from 'marked'
 import 'highlight.js/styles/tomorrow-night.css'
 import 'github-markdown-css'
 import DOMPurify from 'dompurify'
+import hljs from 'highlight.js/lib/core'
 
 marked.setOptions({
   renderer: new marked.Renderer(),
   highlight: function(code, language) {
-    const hljs = require('highlight.js')
-    const validLanguage = hljs.getLanguage(language) ? language : 'plaintext'
+    
+    const validLanguage = hljs.getLanguage(language) ? language : 'javascript'
+    const hljslanguage = require('highlight.js/lib/languages/'+validLanguage)
+    hljs.registerLanguage(validLanguage, hljslanguage)
+    
     return hljs.highlight(validLanguage, code).value
   },
   gfm:true,
@@ -136,6 +140,7 @@ export default {
     border: none;
     outline: none;
     width: -webkit-fill-available;
+    width: -moz-available;
     padding: 15px 45px;
   }
 
