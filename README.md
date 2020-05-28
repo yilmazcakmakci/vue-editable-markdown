@@ -5,7 +5,7 @@
 
 > Click to edit textarea with markdown support.
 
-![Example](example.gif)
+![Example](https://raw.githubusercontent.com/yilmazcakmakci/vue-editable-markdown/master/example.gif)
 
 ### Install
 

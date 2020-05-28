@@ -21,7 +21,14 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div id="app" style="padding:5% 15%">
+  <div id="app" style="padding:50px 15%;background-color:black;height: calc(100vh - 100px)">
     <editable-markdown mode="dark" />
   </div>
 </template>
+
+
+<style>
+body {
+  margin: 0;
+}
+</style>
