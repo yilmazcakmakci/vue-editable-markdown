@@ -3,13 +3,15 @@
     class="md-text-container" 
     :class="[mode === 'dark' ? 'dark': 'light']"
   >
-    <textarea-autosize
+    <textarea
       v-if="editableState"
+      id="text"
+      ref="textarea"
       v-model="markdownText"
       v-focus
       class="md-textarea"
       @input="returnMD"
-      @blur.native="hideTextarea"
+      @blur="hideTextarea"
     />
     <div 
       v-if="!editableState" 
@@ -22,19 +24,16 @@
 
 <script>
 import marked from 'marked'
+import DOMPurify from 'dompurify'
+import autosize from 'autosize'
 import 'highlight.js/styles/tomorrow-night.css'
 import 'github-markdown-css'
-import DOMPurify from 'dompurify'
-import hljs from 'highlight.js/lib/core'
 
 marked.setOptions({
   renderer: new marked.Renderer(),
   highlight: function(code, language) {
-    
-    const validLanguage = hljs.getLanguage(language) ? language : 'javascript'
-    const hljslanguage = require('highlight.js/lib/languages/'+validLanguage)
-    hljs.registerLanguage(validLanguage, hljslanguage)
-    
+    const hljs = require('highlight.js')
+    const validLanguage = hljs.getLanguage(language) ? language : 'plaintext'
     return hljs.highlight(validLanguage, code).value
   },
   gfm:true,
@@ -73,6 +72,13 @@ export default {
     markedText () {
       return DOMPurify.sanitize(marked(this.markdownText))
     },
+  },
+  watch: {
+    markdownText: function () {
+      this.$nextTick(function () {
+        autosize(this.$refs.textarea)
+      })
+    }
   },
   methods: {
     hideTextarea () {
@@ -139,9 +145,10 @@ export default {
     background-color: transparent;
     border: none;
     outline: none;
-    width: -webkit-fill-available;
-    width: -moz-available;
+    width: 100%;
+    box-sizing: border-box;
     padding: 15px 45px;
+    resize: none;
   }
 
   .dark .md-textarea {

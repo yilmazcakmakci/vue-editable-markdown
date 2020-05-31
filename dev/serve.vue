@@ -22,7 +22,7 @@ export default Vue.extend({
 
 <template>
   <div id="app" style="padding:50px 15%;background-color:black;height: calc(100vh - 100px)">
-    <editable-markdown mode="dark" />
+    <editable-markdown mode="dark" :source="source" v-model="source" @blur="log()" />
   </div>
 </template>
 

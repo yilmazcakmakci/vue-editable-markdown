@@ -1,21 +1,16 @@
+import highlight from 'highlight.js';
 import marked from 'marked';
+import DOMPurify from 'dompurify';
 import 'highlight.js/styles/tomorrow-night.css';
 import 'github-markdown-css';
-import DOMPurify from 'dompurify';
-import hljs from 'highlight.js/lib/core';
-
-function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-}
+import autosize from 'autosize';
 
 marked.setOptions({
   renderer: new marked.Renderer(),
   highlight: function (code, language) {
-    const validLanguage = hljs.getLanguage(language) ? language : 'javascript';
+    const hljs = highlight;
 
-    const hljslanguage = commonjsRequire();
-
-    hljs.registerLanguage(validLanguage, hljslanguage);
+    const validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
     return hljs.highlight(validLanguage, code).value;
   },
   gfm: true,
@@ -57,6 +52,13 @@ var script = {
       return DOMPurify.sanitize(marked(this.markdownText));
     }
 
+  },
+  watch: {
+    markdownText: function () {
+      this.$nextTick(function () {
+        autosize(this.$refs.textarea);
+      });
+    }
   },
   methods: {
     hideTextarea() {
@@ -217,26 +219,33 @@ var __vue_render__ = function () {
   return _c('div', {
     staticClass: "md-text-container",
     class: [_vm.mode === 'dark' ? 'dark' : 'light']
-  }, [_vm.editableState ? _c('textarea-autosize', {
+  }, [_vm.editableState ? _c('textarea', {
     directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.markdownText,
+      expression: "markdownText"
+    }, {
       name: "focus",
       rawName: "v-focus"
     }],
+    ref: "textarea",
     staticClass: "md-textarea",
+    attrs: {
+      "id": "text"
+    },
+    domProps: {
+      "value": _vm.markdownText
+    },
     on: {
-      "input": _vm.returnMD
-    },
-    nativeOn: {
-      "blur": function ($event) {
-        return _vm.hideTextarea($event);
-      }
-    },
-    model: {
-      value: _vm.markdownText,
-      callback: function ($$v) {
-        _vm.markdownText = $$v;
-      },
-      expression: "markdownText"
+      "input": [function ($event) {
+        if ($event.target.composing) {
+          return;
+        }
+
+        _vm.markdownText = $event.target.value;
+      }, _vm.returnMD],
+      "blur": _vm.hideTextarea
     }
   }) : _vm._e(), _vm._v(" "), !_vm.editableState ? _c('div', {
     staticClass: "markdown-body",
@@ -246,7 +255,7 @@ var __vue_render__ = function () {
     on: {
       "click": _vm.showTextarea
     }
-  }) : _vm._e()], 1);
+  }) : _vm._e()]);
 };
 
 var __vue_staticRenderFns__ = [];
@@ -254,8 +263,8 @@ var __vue_staticRenderFns__ = [];
 
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return;
-  inject("data-v-2c017a49_0", {
-    source: ":root{--md-dark-bg:#30393e;--md-dark-text:#afafaf;--md-dark-tbl:#15191f}.markdown-body{box-sizing:border-box;padding:45px;cursor:pointer}.dark .markdown-body{color:var(--md-dark-text)}.dark .markdown-body blockquote,.dark .markdown-body h1,.dark .markdown-body h2,.dark .markdown-body table td,.dark .markdown-body table th{border-color:var(--md-dark-bg)}.dark .markdown-body code,.dark .markdown-body hr,.dark .markdown-body pre{background-color:var(--md-dark-bg)}.dark .markdown-body table tr:nth-child(2n){background-color:var(--md-dark-tbl)}.dark .markdown-body table tr{background-color:transparent}.md-text-container{border-radius:12px;font-family:Cambria}.dark.md-text-container{background-color:#222831}.light.md-text-container{background-color:#efefef}.md-textarea{background-color:transparent;border:none;outline:0;width:-webkit-fill-available;width:-moz-available;padding:15px 45px}.dark .md-textarea{color:#c4c4c4}.light .md-textarea{color:#000!important}",
+  inject("data-v-6ea22056_0", {
+    source: ":root{--md-dark-bg:#30393e;--md-dark-text:#afafaf;--md-dark-tbl:#15191f}.markdown-body{box-sizing:border-box;padding:45px;cursor:pointer}.dark .markdown-body{color:var(--md-dark-text)}.dark .markdown-body blockquote,.dark .markdown-body h1,.dark .markdown-body h2,.dark .markdown-body table td,.dark .markdown-body table th{border-color:var(--md-dark-bg)}.dark .markdown-body code,.dark .markdown-body hr,.dark .markdown-body pre{background-color:var(--md-dark-bg)}.dark .markdown-body table tr:nth-child(2n){background-color:var(--md-dark-tbl)}.dark .markdown-body table tr{background-color:transparent}.md-text-container{border-radius:12px;font-family:Cambria}.dark.md-text-container{background-color:#222831}.light.md-text-container{background-color:#efefef}.md-textarea{background-color:transparent;border:none;outline:0;width:100%;box-sizing:border-box;padding:15px 45px;resize:none}.dark .md-textarea{color:#c4c4c4}.light .md-textarea{color:#000!important}",
     map: undefined,
     media: undefined
   });

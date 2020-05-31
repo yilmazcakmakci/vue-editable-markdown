@@ -1,13 +1,9 @@
-'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _interopDefault(e){return(e&&(typeof e==='object')&&'default'in e)?e['default']:e}var marked=_interopDefault(require('marked'));require('highlight.js/styles/tomorrow-night.css'),require('github-markdown-css');var DOMPurify=_interopDefault(require('dompurify')),hljs=_interopDefault(require('highlight.js/lib/core'));function commonjsRequire () {
-	throw new Error('Dynamic requires are not currently supported by @rollup/plugin-commonjs');
-}marked.setOptions({
+'use strict';Object.defineProperty(exports,'__esModule',{value:true});function _interopDefault(e){return(e&&(typeof e==='object')&&'default'in e)?e['default']:e}var highlight=_interopDefault(require('highlight.js')),marked=_interopDefault(require('marked')),DOMPurify=_interopDefault(require('dompurify'));require('highlight.js/styles/tomorrow-night.css'),require('github-markdown-css');var autosize=_interopDefault(require('autosize'));marked.setOptions({
   renderer: new marked.Renderer(),
-  highlight: function highlight(code, language) {
-    var validLanguage = hljs.getLanguage(language) ? language : 'javascript';
+  highlight: function highlight$1(code, language) {
+    var hljs = highlight;
 
-    var hljslanguage = commonjsRequire();
-
-    hljs.registerLanguage(validLanguage, hljslanguage);
+    var validLanguage = hljs.getLanguage(language) ? language : 'plaintext';
     return hljs.highlight(validLanguage, code).value;
   },
   gfm: true,
@@ -45,6 +41,13 @@ var script = {
   computed: {
     markedText: function markedText() {
       return DOMPurify.sanitize(marked(this.markdownText));
+    }
+  },
+  watch: {
+    markdownText: function markdownText() {
+      this.$nextTick(function () {
+        autosize(this.$refs.textarea);
+      });
     }
   },
   methods: {
@@ -186,28 +189,35 @@ var __vue_render__ = function __vue_render__() {
   return _c('div', {
     staticClass: "md-text-container",
     class: [_vm.mode === 'dark' ? 'dark' : 'light']
-  }, [_vm.editableState ? _c('textarea-autosize', {
+  }, [_vm.editableState ? _c('textarea', {
     directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.markdownText,
+      expression: "markdownText"
+    }, {
       name: "focus",
       rawName: "v-focus"
     }],
+    ref: "textarea",
     staticClass: "md-textarea",
+    attrs: {
+      "id": "text"
+    },
+    domProps: {
+      "value": _vm.markdownText
+    },
     on: {
-      "input": _vm.returnMD
-    },
-    nativeOn: {
-      "blur": function blur($event) {
-        return _vm.hideTextarea($event);
-      }
-    },
-    model: {
-      value: _vm.markdownText,
-      callback: function callback($$v) {
-        _vm.markdownText = $$v;
-      },
-      expression: "markdownText"
+      "input": [function ($event) {
+        if ($event.target.composing) {
+          return;
+        }
+
+        _vm.markdownText = $event.target.value;
+      }, _vm.returnMD],
+      "blur": _vm.hideTextarea
     }
-  }) : _vm._e(), _vm._ssrNode(" " + (!_vm.editableState ? "<div class=\"markdown-body\">" + _vm._s(_vm.markedText) + "</div>" : "<!---->"))], 2);
+  }, []) : _vm._e(), _vm._ssrNode(" " + (!_vm.editableState ? "<div class=\"markdown-body\">" + _vm._s(_vm.markedText) + "</div>" : "<!---->"))], 2);
 };
 
 var __vue_staticRenderFns__ = [];
@@ -215,8 +225,8 @@ var __vue_staticRenderFns__ = [];
 
 var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
   if (!inject) return;
-  inject("data-v-2c017a49_0", {
-    source: ":root{--md-dark-bg:#30393e;--md-dark-text:#afafaf;--md-dark-tbl:#15191f}.markdown-body{box-sizing:border-box;padding:45px;cursor:pointer}.dark .markdown-body{color:var(--md-dark-text)}.dark .markdown-body blockquote,.dark .markdown-body h1,.dark .markdown-body h2,.dark .markdown-body table td,.dark .markdown-body table th{border-color:var(--md-dark-bg)}.dark .markdown-body code,.dark .markdown-body hr,.dark .markdown-body pre{background-color:var(--md-dark-bg)}.dark .markdown-body table tr:nth-child(2n){background-color:var(--md-dark-tbl)}.dark .markdown-body table tr{background-color:transparent}.md-text-container{border-radius:12px;font-family:Cambria}.dark.md-text-container{background-color:#222831}.light.md-text-container{background-color:#efefef}.md-textarea{background-color:transparent;border:none;outline:0;width:-webkit-fill-available;width:-moz-available;padding:15px 45px}.dark .md-textarea{color:#c4c4c4}.light .md-textarea{color:#000!important}",
+  inject("data-v-6ea22056_0", {
+    source: ":root{--md-dark-bg:#30393e;--md-dark-text:#afafaf;--md-dark-tbl:#15191f}.markdown-body{box-sizing:border-box;padding:45px;cursor:pointer}.dark .markdown-body{color:var(--md-dark-text)}.dark .markdown-body blockquote,.dark .markdown-body h1,.dark .markdown-body h2,.dark .markdown-body table td,.dark .markdown-body table th{border-color:var(--md-dark-bg)}.dark .markdown-body code,.dark .markdown-body hr,.dark .markdown-body pre{background-color:var(--md-dark-bg)}.dark .markdown-body table tr:nth-child(2n){background-color:var(--md-dark-tbl)}.dark .markdown-body table tr{background-color:transparent}.md-text-container{border-radius:12px;font-family:Cambria}.dark.md-text-container{background-color:#222831}.light.md-text-container{background-color:#efefef}.md-textarea{background-color:transparent;border:none;outline:0;width:100%;box-sizing:border-box;padding:15px 45px;resize:none}.dark .md-textarea{color:#c4c4c4}.light .md-textarea{color:#000!important}",
     map: undefined,
     media: undefined
   });
@@ -227,7 +237,7 @@ var __vue_inject_styles__ = function __vue_inject_styles__(inject) {
 var __vue_scope_id__ = undefined;
 /* module identifier */
 
-var __vue_module_identifier__ = "data-v-2c017a49";
+var __vue_module_identifier__ = "data-v-6ea22056";
 /* functional template */
 
 var __vue_is_functional_template__ = false;
